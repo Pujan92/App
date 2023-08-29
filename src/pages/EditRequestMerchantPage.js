@@ -10,6 +10,7 @@ import styles from '../styles/styles';
 import Navigation from '../libs/Navigation/Navigation';
 import CONST from '../CONST';
 import useLocalize from '../hooks/useLocalize';
+import * as ValidationUtils from '../libs/ValidationUtils';
 
 const propTypes = {
     /** Transaction default merchant value */
@@ -22,6 +23,13 @@ const propTypes = {
 function EditRequestMerchantPage({defaultMerchant, onSubmit}) {
     const {translate} = useLocalize();
     const merchantInputRef = useRef(null);
+
+    const validate = (values) => {
+        const requiredFields = ['merchant'];
+        const errors = ValidationUtils.getFieldRequiredErrors(values, requiredFields);
+        return errors;
+    };
+
     return (
         <ScreenWrapper
             includeSafeAreaPaddingBottom={false}
@@ -35,6 +43,7 @@ function EditRequestMerchantPage({defaultMerchant, onSubmit}) {
             <Form
                 style={[styles.flexGrow1, styles.ph5]}
                 formID={ONYXKEYS.FORMS.MONEY_REQUEST_MERCHANT_FORM}
+                validate={validate}
                 onSubmit={onSubmit}
                 submitButtonText={translate('common.save')}
                 enabledWhenOffline

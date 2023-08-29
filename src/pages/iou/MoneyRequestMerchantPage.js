@@ -16,6 +16,7 @@ import * as IOU from '../../libs/actions/IOU';
 import optionPropTypes from '../../components/optionPropTypes';
 import CONST from '../../CONST';
 import useLocalize from '../../hooks/useLocalize';
+import * as ValidationUtils from '../../libs/ValidationUtils';
 
 const propTypes = {
     /** Onyx Props */
@@ -89,6 +90,12 @@ function MoneyRequestMerchantPage({iou, route}) {
         Navigation.goBack(ROUTES.getMoneyRequestConfirmationRoute(iouType, reportID));
     }
 
+    const validate = (values) => {
+        const requiredFields = ['moneyRequestMerchant'];
+        const errors = ValidationUtils.getFieldRequiredErrors(values, requiredFields);
+        return errors;
+    };
+
     /**
      * Sets the money request comment by saving it to Onyx.
      *
@@ -113,6 +120,7 @@ function MoneyRequestMerchantPage({iou, route}) {
             <Form
                 style={[styles.flexGrow1, styles.ph5]}
                 formID={ONYXKEYS.FORMS.MONEY_REQUEST_MERCHANT_FORM}
+                validate={validate}
                 onSubmit={(value) => updateMerchant(value)}
                 submitButtonText={translate('common.save')}
                 enabledWhenOffline
